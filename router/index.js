@@ -4,6 +4,7 @@ const { body } = require("express-validator");
 
 const userController = require("../controllers/user-controller");
 const WordsController = require("../controllers/words-controller");
+const RepeatWordsController = require("../controllers/repeatWords-controller");
 
 router.post(
   "/registration",
@@ -27,5 +28,10 @@ router.get("/words", WordsController.getWords);
 
 router.get("/word", WordsController.getWord);
 router.delete("/word", WordsController.deleteWord);
+
+//----------------Repeat-Words-----------------//
+
+router.post("/repeat-word", RepeatWordsController.addWord);
+router.get("/repeat-words", RepeatWordsController.getAllWords);
 
 module.exports = router;

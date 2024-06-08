@@ -12,4 +12,10 @@ const WordSchema = new Schema({
   datestamp: { type: Date, required: true },
 });
 
-module.exports = model("Word", WordSchema);
+const WordModel = model("Word", WordSchema, "words");
+const RepeatWordModel = model("RepeatWord", WordSchema, "repeatWords");
+
+module.exports = {
+  WordModel,
+  RepeatWordModel,
+};

@@ -1,16 +1,20 @@
+const repeatWordsService = require("../service/repeatWords-service");
 const WordsService = require("../service/words-service");
-const stripe = require("stripe")(
-  "sk_test_51PMOn8RuHZHrqSSF8Yagh5qXxznwvfG3PB2mW61GF8WgOQUzs4jCvOWXywTxJ2IAwDQg8e67lxY9eAh69yqDfVVY00RbTJELr3"
-);
 
 class WordsController {
   async addWord(req, res, next) {
-    console.log(req.body);
-    const wordData = await WordsService.addWord(req.body);
-    return res.json({
-      word: wordData,
-      message: "Words was added successfully",
-    });
+    try {
+      const wordData = await WordsService.addWord(req.body);
+
+      await repeatWordsService.addWord(req.body);
+
+      return res.json({
+        word: wordData,
+        message: "Words was added successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 
   async getWords(req, res, next) {
@@ -24,19 +28,24 @@ class WordsController {
     const wordData = await WordsService.getWord(word);
 
     return res.json({
-      data: wordData,
+      words: wordData,
     });
   }
 
   async deleteWord(req, res, next) {
-    const word = req.query.word;
+    try {
+      const word = req.query.word;
 
-    const wordData = await WordsService.deleteWord(word);
+      const wordData = await WordsService.deleteWord(word);
+      await repeatWordsService.deleteWord(word);
 
-    return res.json({
-      data: wordData,
-      message: "word was deleted successfully",
-    });
+      return res.json({
+        data: wordData,
+        message: "word was deleted successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

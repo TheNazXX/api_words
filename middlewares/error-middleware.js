@@ -1,9 +1,16 @@
+const Words_Error = require("../exceptions/WordsModel/word-model");
 const API_Error = require("../exceptions/api-error");
 
 module.exports = function (error, req, res, next) {
   console.log(error);
 
   if (error instanceof API_Error) {
+    return res
+      .status(error.status)
+      .json({ message: error.message, errors: error.errors });
+  }
+
+  if (error instanceof Words_Error) {
     return res
       .status(error.status)
       .json({ message: error.message, errors: error.errors });
